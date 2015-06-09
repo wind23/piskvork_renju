@@ -339,7 +339,7 @@ void TgameSettings::use()
 	debugAI=(suspend>>1)&1;
 	turTieRepeat=tieRepeat;
 	turLogMsg=messages;
-	::exactFive=exactFive;
+	::ruleFive=ruleFive;
 }
 
 void TgameSettings::fill()
@@ -354,7 +354,7 @@ void TgameSettings::fill()
 	sendMoves=(char)turRecord;
 	tieRepeat=(char)turTieRepeat;
 	messages=(char)turLogMsg;
-	exactFive=(char)::exactFive;
+	exactFive=(char)::ruleFive;
 	openingData[0]=0;
 }
 
