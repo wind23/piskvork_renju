@@ -1,5 +1,6 @@
 /*
-	(C) 2000-2014  Petr Lastovicka
+	(C) 2000-2015  Petr Lastovicka
+	(C) 2015  Tianyi Hao
 
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License.
@@ -96,7 +97,7 @@ width=20,  //number of squares horizontally (without borders)
  tolerance=1000, //how longer can AI think after timeout
  hardTimeOut=0,  //should we check timeout for AI
  humanTimeOut=0, //should we check timeout for human
- exactFive=0,    //0= five or more stones win, 1=exactly 5 win
+ ruleFive=0,    //0= five or more stones win, 1=exactly 5 win
  continuous=0,   //0= until someone wins, 1=until board is full
  priority=2,     //AI process priority
  autoBegin=0,    //automatic openings
@@ -138,7 +139,7 @@ width=20,  //number of squares horizontally (without borders)
  turGamesTotal,  //total number of games in tournament
  turGamesCounter,//currently finished games in tournament
  gotoMove,       //number in goto move dialog box
- terminate,      //stopping AI
+ terminatee,      //stopping AI
  saveLock,
  Naccel,
  lastTime[2],    //displayed game times (used to avoid flicker)
@@ -278,7 +279,7 @@ struct Treg { char *s; int *i; } regVal[]={
 	{"matchRepeat", &turMatchRepeat},
 	{"infoEvaluate", &infoEval},
 	{"logPipe", &debugPipe},
-	{"exactFive", &exactFive},
+	{"ruleFive", &ruleFive},
 	{"continuous", &continuous},
 	{"clearLog", &clearLog},
 	{"ignoreErrors", &ignoreErrors},
@@ -1393,7 +1394,7 @@ BOOL CALLBACK LogProc(HWND hWnd, UINT msg, WPARAM wP, LPARAM lP)
 BOOL CALLBACK OptionsProc(HWND hWnd, UINT msg, WPARAM wP, LPARAM)
 {
 	int i, id;
-	static int width1, height1, tolerance1, maxMemory1, exactFive1, continuous1;
+	static int width1, height1, tolerance1, maxMemory1, ruleFive1, continuous1;
 	static struct{ int *prom, id; } D[]={
 		{&width, 103},
 		{&height, 104},
@@ -1428,7 +1429,7 @@ BOOL CALLBACK OptionsProc(HWND hWnd, UINT msg, WPARAM wP, LPARAM)
 			height1=height;
 			tolerance1=tolerance;
 			maxMemory1=maxMemory;
-			exactFive1=exactFive;
+			ruleFive1=ruleFive;
 			continuous1=continuous;
 			for(i=0; i<sizeof(D)/sizeof(*D); i++){
 				id=D[i].id;
@@ -1440,7 +1441,7 @@ BOOL CALLBACK OptionsProc(HWND hWnd, UINT msg, WPARAM wP, LPARAM)
 					 CheckDlgButton(hWnd, id, *D[i].prom ? BST_CHECKED : BST_UNCHECKED);
 				 }
 			}
-			CheckRadioButton(hWnd, 555, 556, 555+exactFive);
+			CheckRadioButton(hWnd, 555, 557, 555+ruleFive);
 			CheckRadioButton(hWnd, 559, 560, 559+continuous);
 			for(i=0; i<sizeA(priorTab); i++){
 				SendDlgItemMessage(hWnd, 120, CB_ADDSTRING, 0, (LPARAM)lng(690+i, priorTab[i]));
@@ -1470,7 +1471,7 @@ BOOL CALLBACK OptionsProc(HWND hWnd, UINT msg, WPARAM wP, LPARAM)
 							 *D[i].prom= IsDlgButtonChecked(hWnd, id);
 						 }
 					}
-					exactFive= getRadioButton(hWnd, 555, 556);
+					ruleFive= getRadioButton(hWnd, 555, 557);
 					continuous= getRadioButton(hWnd, 559, 560);
 					priority= (int)SendMessage(GetDlgItem(hWnd, 120), CB_GETCURSEL, 0, 0);
 					if(isWin9X){
@@ -1482,7 +1483,7 @@ BOOL CALLBACK OptionsProc(HWND hWnd, UINT msg, WPARAM wP, LPARAM)
 					GetDlgItemText(hWnd, 122, dataDir, sizeof(dataDir));
 					if(turNplayers || isNetGame){
 						width=width1, height=height1, tolerance=tolerance1;
-						exactFive=exactFive1, continuous=continuous1;
+						ruleFive=ruleFive1, continuous=continuous1;
 					}
 					if(width1!=width || height1!=height){
 						wP=119;
@@ -1492,7 +1493,7 @@ BOOL CALLBACK OptionsProc(HWND hWnd, UINT msg, WPARAM wP, LPARAM)
 							players[0].sendInfo(INFO_MEMORY);
 							players[1].sendInfo(INFO_MEMORY);
 						}
-						if(exactFive1!=exactFive || continuous1!=continuous){
+						if(ruleFive1!=ruleFive || continuous1!=continuous){
 							players[0].sendInfo(INFO_RULE);
 							players[1].sendInfo(INFO_RULE);
 						}
@@ -1797,7 +1798,7 @@ BOOL CALLBACK TurProc(HWND hWnd, UINT msg, WPARAM wP, LPARAM)
 			SetDlgItemText(hWnd, 114, cmdTurEnd);
 			CheckRadioButton(hWnd, 570, 571, 570+turRule);
 			CheckRadioButton(hWnd, 575, 576, 575+turNet);
-			CheckRadioButton(hWnd, 555, 556, 555+exactFive);
+			CheckRadioButton(hWnd, 555, 557, 555+ruleFive);
 			CheckDlgButton(hWnd, 572, turFormat==2 ? BST_CHECKED : BST_UNCHECKED);
 			for(i=0; i<sizeof(D)/sizeof(*D); i++){
 				id=D[i].id;
@@ -1867,7 +1868,7 @@ BOOL CALLBACK TurProc(HWND hWnd, UINT msg, WPARAM wP, LPARAM)
 					GetDlgItemText(hWnd, 114, cmdTurEnd, sizeof(cmdTurEnd));
 					turRule= getRadioButton(hWnd, 570, 571); //radio is not visible when starting tournament
 					turNet= getRadioButton(hWnd, 575, 576);
-					exactFive= getRadioButton(hWnd, 555, 556);
+					ruleFive= getRadioButton(hWnd, 555, 557);
 					turFormat= 1+IsDlgButtonChecked(hWnd, 572);
 					for(i=0; i<sizeof(D)/sizeof(*D); i++){
 						id=D[i].id;
@@ -2725,12 +2726,12 @@ char* parseCommandLine(bool &openingEnabled)
 			msg("Please see piskvork.txt for command line options.");
 		}
 		else if(!strcmp(arg, "-rule") && __argc > i+1){ //rule
-			int exactFiveTmp;
-			int exactFiveParsed = sscanf(__argv[++i], "%d", &exactFiveTmp);
-			if(!exactFiveParsed || exactFiveTmp > 1 || exactFiveTmp < 0)
+			int ruleFiveTmp;
+			int ruleFiveParsed = sscanf(__argv[++i], "%d", &ruleFiveTmp);
+			if(!ruleFiveParsed || ruleFiveTmp > 2 || ruleFiveTmp < 0)
 			 msg("Unknown rule %s", __argv[i]);
 			else
-				exactFive = exactFiveTmp;
+				ruleFive = ruleFiveTmp;
 		}
 		else if(!strcmp(arg, "-timematch") && __argc > i+1){ //time game
 			int timeGameTmp;

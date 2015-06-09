@@ -1,5 +1,6 @@
 /*
-	(C) 2005-2014  Petr Lastovicka
+	(C) 2000-2015  Petr Lastovicka
+	(C) 2015  Tianyi Hao
 
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License.
@@ -46,7 +47,7 @@ struct TturSettings {
 	bool autoBeginForce;
 
 #if STATE_VERSION >=0x805
-	bool exactFive;
+	int ruleFive;
 #endif
 
 	void fill();
@@ -369,7 +370,7 @@ void TturSettings::use()
 	turMatchRepeat= matchRepeat ? matchRepeat : 2;
 	openingRandomShiftT=openingRandomShift;
 	::autoBeginForce=autoBeginForce;
-	::exactFive = exactFive;
+	::ruleFive = ruleFive;
 }
 
 void TturSettings::fill()
@@ -392,7 +393,7 @@ void TturSettings::fill()
 	matchRepeat=(short)turMatchRepeat;
 	openingRandomShift=(char)openingRandomShiftT;
 	autoBeginForce=::autoBeginForce;
-	exactFive = ::exactFive!=0;
+	ruleFive = ::ruleFive;
 }
 
 //reload tournament state from a file
@@ -985,7 +986,7 @@ void stopListen()
 void serverEnd()
 {
 	if(!isServer) return;
-	//terminate clients threads
+	//terminatee clients threads
 	turAbort();
 	//close listening socket
 	stopListen();

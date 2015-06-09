@@ -1,5 +1,6 @@
 /*
-(C) 2004-2014  Petr Lastovicka
+	(C) 2000-2015  Petr Lastovicka
+	(C) 2015  Tianyi Hao
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License.
@@ -590,7 +591,7 @@ int Tplayer::sendInfo(int mask)
 	if((mask & INFO_RULE)/* && !turNplayers*/){
 		//I dont why there is !turNplayers in condition,
 		//but that is the reason why rule 1 is not send in the tournament
-		sendInfoCmd("rule", exactFive|(continuous<<1));
+		sendInfoCmd("rule", ruleFive|(continuous<<1));
 	}
 	if(mask & INFO_TIMELEFT) sendInfoCmd("time_left", timeLeft());
 	if((mask & INFO_DIR) && dataDir[0] && !isClient){
@@ -651,7 +652,7 @@ int Tplayer::move()
 
 	timeInit=-1;
 	if(!isComp) return 0;
-	if(finished || terminate){
+	if(finished || terminatee){
 		softPause();
 		return 1;
 	}
@@ -678,7 +679,7 @@ int Tplayer::move()
 			for(i=DlastBoard-1; i>=moves-1; i--){
 				sendCommand("TAKEBACK %d,%d", lastBoard[i].x-1, lastBoard[i].y-1);
 				readCommand(buf, sizeof(buf));
-				if(terminate) return 9; //time out
+				if(terminatee) return 9; //time out
 				if(_stricmp(buf, "OK")) goto l1; //not supported
 			}
 			mustSendBoard=false;
@@ -712,7 +713,7 @@ int Tplayer::move()
 			}
 			readCommand(buf, sizeof(buf));
 			SetEvent(start2Event);
-			if(terminate) return 9;
+			if(terminatee) return 9;
 			if(_stricmp(buf, "OK")){
 				if(restarted){ stopAI(); goto l1; }
 				if((width!=20 || height!=20) && !turNplayers &&
@@ -762,7 +763,7 @@ int Tplayer::move()
 		//wait for AI turn
 		for(;;){
 			readCommand(buf, sizeof(buf));
-			if(terminate) return 9;
+			if(terminatee) return 9;
 			if(_strnicmp(buf, "suggest ", 8)){
 				if(sscanf(buf, "%d,%d", &x, &y)!=2){
 					if(!buf[0] && notRunning()){
@@ -797,7 +798,7 @@ int Tplayer::move()
 			CloseHandle(process);
 			process=0;
 		}
-		if(terminate) return 9;
+		if(terminatee) return 9;
 
 		//read messages
 		f= fopen(MsgDat, "rt");

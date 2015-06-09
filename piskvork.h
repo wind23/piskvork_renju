@@ -1,5 +1,6 @@
 /*
- (C) Petr Lastovicka
+	(C) 2000-2015  Petr Lastovicka
+	(C) 2015  Tianyi Hao
  
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License.
@@ -141,7 +142,7 @@ struct PROCESS_MEMORY_COUNTERS {
 typedef BOOL (__stdcall *TmemInfo)(HANDLE,PROCESS_MEMORY_COUNTERS*,DWORD);
 
 //-----------------------------------------------------------------
-extern int player,moves,width,height,tolerance,maxMemory,turNplayers,logDebug,logMessage,suspendAI,debugAI,port,turCurRepeat,autoBegin,turRepeat,turRecord,turDelay,priority,terminate,turGamesCounter,turTieRepeat,turTieCounter,startMoves,errDelay,turOnlyLosses,turFormat,turGamesTotal,turOpening,invert,turNet,turRule,mx,my,height2,lastTurnTime[2],hardTimeOut,humanTimeOut,opening,logMoves,moveStart,coordStart,sameTime,turMatchRepeat,turLogMsg,infoEval,saveLock,debugPipe,exactFive,continuous,undoRequest,netGameVersion,ignoreErrors,openingRandomShift1,openingRandomShiftT,affinity, Nopening, includeUndoMoves, soundNotification,cmdlineGameOutFileFormat;
+extern int player,moves,width,height,tolerance,maxMemory,turNplayers,logDebug,logMessage,suspendAI,debugAI,port,turCurRepeat,autoBegin,turRepeat,turRecord,turDelay,priority,terminatee,turGamesCounter,turTieRepeat,turTieCounter,startMoves,errDelay,turOnlyLosses,turFormat,turGamesTotal,turOpening,invert,turNet,turRule,mx,my,height2,lastTurnTime[2],hardTimeOut,humanTimeOut,opening,logMoves,moveStart,coordStart,sameTime,turMatchRepeat,turLogMsg,infoEval,saveLock,debugPipe,ruleFive,continuous,undoRequest,netGameVersion,ignoreErrors,openingRandomShift1,openingRandomShiftT,affinity, Nopening, includeUndoMoves, soundNotification,cmdlineGameOutFileFormat;
 extern DWORD openingCRC;
 extern bool paused,finished,disableScore,isWin9X,isClient,isServer,isNetGame,isListening,turTimerAvail,levelChanged,cmdLineGame,autoBeginForce,tmpPsq;
 
@@ -181,6 +182,7 @@ void printMoves();
 void printTime(int pl);
 bool getWinLine(Psquare p, Psquare &p2);
 void printWinLine(Psquare p);
+void printForbid(Psquare p);
 void invalidate();
 void hiliteLast();
 void cancelHilite();

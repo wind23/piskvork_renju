@@ -1,5 +1,6 @@
 /*
-(C) 2000-2014  Petr Lastovicka
+	(C) 2000-2015  Petr Lastovicka
+	(C) 2015  Tianyi Hao
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License.
@@ -634,7 +635,7 @@ void turResultInner(TfileName& fn)
 	else{
 		strcpy(buf1, lng(611, "No"));
 	}
-	removeChar(ruleBuffer, exactFive ? lng(556, "exactly five stones wins") : lng(555, "five or more stones wins"), '&');
+	removeChar(ruleBuffer, ruleFive ==2? lng(557, "renju rule") :(ruleFive ? lng(556, "exactly five stones wins") : lng(555, "five or more stones wins")), '&');
 
 	s+=sprintf(s, lng(600, "Time for turn: %d %s,   Time for match: %s\r\nTolerance: %d %s,   Memory: %d MB\r\nOpenings: %s\r\nRule: %s\r\nOpening CRC: %x\r\nGames played: %d"),//
 		m%1000 ? m : m/1000, getLngSec(m%1000==0), buf,
@@ -997,13 +998,13 @@ void hardPause()
 {
 	softPause();
 	if(notSuspended()){
-		terminate++;
+		terminatee++;
 		//the working thread is waiting in ReadFile and 
 		//  can be unblocked only by terminating the AI
 		players[player].stopAI();
 		//NOTE: the working thread can start AI again just before Suspend
 		while(notSuspended()) Sleep(50);
-		terminate--;
+		terminatee--;
 	}
 }
 
@@ -1173,6 +1174,9 @@ bool doMove1(Psquare p, int action)
 	Psquare p1, p2, lastMove0;
 
 	lastMove0=lastMove;
+	bool checkforbid(Psquare px, Psquare board,int move,int size);
+	int f=checkforbid(p,lastMove,moves,width);
+
 	if(finished || p<boardb || p>=boardk || p->z) return false;
 	p->z= player+1;
 	lastMove=p;
@@ -1224,7 +1228,8 @@ bool doMove1(Psquare p, int action)
 			nxtP(p2, 1);
 			poc++;
 		} while(p2->z==p->z && !p2->winLineDir);
-		if(exactFive ? poc==5 : poc>=5){
+		//kkkkkkkkkkkkkkkkkkkk
+		if((ruleFive%2 ? poc==5 : poc>=5)||(ruleFive==2 && f)){
 			nxtP(p1, 1);
 			prvP(p2, 1);
 			//win
@@ -1233,43 +1238,83 @@ bool doMove1(Psquare p, int action)
 				if(turNplayers){
 					t1=&turTable[i1=players[1-player].turPlayerId];
 					t2=&turTable[i2=players[player].turPlayerId];
-					t1->wins++;
-					t2->losses++;
+					if(!f)
+					{
+						t1->wins++;
+						t2->losses++;
+					}
+					else
+					{
+						t1->losses++;
+						t2->wins++;
+					}
 					c= getCell(i2, i1);
 					if(moves&1){ //winner started
-						t1->wins1++;
+						if(!f)
+						{
+							t1->wins1++;
+						}
+						else
+						{
+							t2->wins1++;
+						}
 						c->start++;
 					}
 					else{ //loser started
-						t2->losses1++;
+						if(!f)
+						{
+							t2->losses1++;
+						}
+						else
+						{
+							t1->losses1++;
+						}
 						c->notStart++;
 					}
 					turAddTime();
 				}
 				else{
-					players[1-player].score++;
+					if(!f)
+					{
+						players[1-player].score++;
+					}
+					else
+					{
+						players[player].score++;
+					}
 				}
 				//log
 				char buf[64];
-				players[1-player].getName(buf, sizeof(buf));
+				if(!f)
+				{
+					players[1-player].getName(buf, sizeof(buf));
+				}
+				else
+				{
+					players[player].getName(buf, sizeof(buf));
+				}
 				wrLog(lng(653, "\r\n%s wins\r\n"), buf);
 				wrGameResult();
 			}
 			//draw a line
-			for(;; prvP(p2, 1)){
-				p2->winLineDir=s;
-				p2->winLineStart=p1;
-				if(p2==p1) break;
+			if(!f)
+			{
+				for(;; prvP(p2, 1)){
+					p2->winLineDir=s;
+					p2->winLineStart=p1;
+					if(p2==p1) break;
+				}
+				boardChanged();
+				cancelHilite();
+				printWinLine(p);
 			}
-			boardChanged();
-			cancelHilite();
-			printWinLine(p);
+
 			printScore();
 			if(!continuous || turNplayers) finishGame(0);//standard finish
 			break;
 		}
 	}
-	if(moves>=width*height && !finished){
+	if(moves>=width*height*9/10 && !finished){
 		//board is full
 		if(turNplayers && turTieCounter<turTieRepeat){
 			turTieCounter++;
