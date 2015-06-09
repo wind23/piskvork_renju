@@ -208,6 +208,7 @@ void Tplayer::checkTimeOut(int currentTime)
 			turTable[turPlayerId].timeouts++;
 			turTable[p->turPlayerId].winsE++;
 			getCell(turPlayerId, p->turPlayerId)->error++;
+			win7TaskbarProgress.SetProgressState(hWin, TBPF_ERROR);
 			turAddTime();
 		}
 		else{
@@ -894,6 +895,9 @@ void turStart(char* openingFileName)
 		TfileName fn;
 		getMsgFn(fn);
 		DeleteFile(fn);
+
+		win7TaskbarProgress.SetProgressState(hWin, TBPF_NORMAL);
+		win7TaskbarProgress.SetProgressValue(hWin, 0, 100);
 	}
 	LeaveCriticalSection(&netLock);
 	if(!isServer) turLocalNext();

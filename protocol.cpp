@@ -82,6 +82,7 @@ void errMsg(char *text, ...)
 			turTable[i1=players[player].turPlayerId].errors++;
 			turTable[i2=players[1-player].turPlayerId].winsE++;
 			getCell(i1, i2)->error++;
+			win7TaskbarProgress.SetProgressState(hWin, TBPF_ERROR);
 			turAddTime();
 		}
 		vwrMessage(text, va);

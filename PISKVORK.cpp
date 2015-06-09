@@ -16,6 +16,7 @@
 #pragma comment(lib,"version.lib")
 #pragma comment(lib,"wsock32.lib")
 #pragma comment(lib,"winmm.lib")
+#pragma comment(lib,"ole32.lib")
 
 //-----------------------------------------------------------------
 /*
@@ -25,6 +26,7 @@ USEUNIT("protocol.cpp");
 USEUNIT("game.cpp");
 USEUNIT("lang.cpp");
 USEUNIT("netgame.cpp");
+USEUNIT("taskbarprogress.cpp");
 */
 //-----------------------------------------------------------------
 
@@ -197,6 +199,7 @@ CRITICAL_SECTION timerLock, drawLock;
 SIZE szScore, szCoord, szMove, szName[2], szTimeGame[2], szTimeMove[2];
 
 TmemInfo getMemInfo;
+Win7TaskbarProgress win7TaskbarProgress;
 
 OPENFILENAME psqOfn={
 	sizeof(OPENFILENAME), 0, 0, 0, 0, 0, 1,
@@ -2220,6 +2223,7 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT mesg, WPARAM wP, LPARAM lP)
 				case 108: //ESC
 					hardPause();
 					if(turNplayers && !isClient){
+						win7TaskbarProgress.SetProgressState(hWin, TBPF_PAUSED);
 						a=turTimerAvail;
 						turTimerAvail=false;
 						if(MessageBox(hWnd, lng(810, "Do you want to abort the tournament ?"),
@@ -2229,6 +2233,8 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT mesg, WPARAM wP, LPARAM lP)
 						}
 						else{
 							resume();
+							win7TaskbarProgress.SetProgressState(hWin, TBPF_NORMAL);
+							win7TaskbarProgress.SetProgressValue(hWin, turGamesCounter, turGamesTotal);
 							turTimerAvail=a;
 						}
 					}
@@ -2815,6 +2821,11 @@ int pascal WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR, int cmdShow)
 	WNDCLASS wc;
 	MSG mesg;
 	OSVERSIONINFO v;
+
+	//DPIAware
+	typedef BOOL(WINAPI *TGetProcAddress)();
+	TGetProcAddress getProcAddress = (TGetProcAddress) GetProcAddress(GetModuleHandle("user32"), "SetProcessDPIAware");
+	if(getProcAddress) getProcAddress();
 
 	v.dwOSVersionInfoSize= sizeof(OSVERSIONINFO);
 	GetVersionEx(&v);
