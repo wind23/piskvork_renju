@@ -10,14 +10,6 @@ using namespace std;
 
 int fflag=0;
 int nosix=0;
-int timee=30000000;    // 单步时间
-int times=0;         // 预计时间
-int timel=30000000;     // 总局时
-int timestart=0;
-int volatile compend=0;
-int comphalfend=0;
-int staticboard=1;
-int movei=0;
 int S=20;
 int boardSize=20;
 
