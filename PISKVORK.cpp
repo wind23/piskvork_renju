@@ -2109,6 +2109,7 @@ BOOL CALLBACK AboutProc(HWND hWnd, UINT msg, WPARAM wP, LPARAM)
 			wP=LOWORD(wP);
 			switch(wP){
 				case 502:
+				case 506:
 					GetDlgItemTextA(hWnd, wP, buf, sizeA(buf));
 					ShellExecuteA(0, 0, buf, 0, 0, SW_SHOWNORMAL);
 					break;

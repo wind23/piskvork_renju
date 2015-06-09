@@ -1,2 +1,32 @@
-# piskvork_renju
-A modification of the gomoku interface piskvork, which could support renju rule.
+Piskvork for Renju
+==================
+
+* Copyright (C) 2000-2015 Petr Lastovicka
+* Copyright (C) 2012-2015 Tianyi Hao
+
+Piskvork is a gomoku interface which could load a lot of gomoku AI engines, 
+which has been used in the gomuku AI tournament [Gomocup](http://gomocup.org).
+
+The original Piskvork by Petr Lastovicka could been downloaded from:  
+(http://sourceforge.net/projects/piskvork/files/piskvork.zip/download).  
+The original C++ source code could been download from:  
+(http://petr.lastovicka.sweb.cz/src/piskvork.zip).  
+The protocol between a brain and Piskvork is at:  
+(http://petr.lastovicka.sweb.cz/protocl2en.htm).
+
+Since the original Piskvork could not support the renju rule, a modification 
+has been implied to it to support it. The continuous game has been removed. 
+The command that Piskvork sends to the brain for renju rule is:
+
+	INFO rule 2
+
+Usage: Just replace the piskvork.exe in the original
+[Piskvork package](http://sourceforge.net/projects/piskvork/files/piskvork.zip/download)
+with the [new EXE file](https://raw.github.com/wind23/piskvork_renju/master/Release/piskvork.exe)
+in Piskvork for Renju.
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the
+[GNU General Public License](http://www.gnu.org/licenses/gpl.html).
+If you use any part of it in your program, then you must publish 
+all your source code too.

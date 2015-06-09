@@ -13,7 +13,9 @@
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
-[Rr]elease/
+![Rr]elease/
+[Rr]elease/*
+![Rr]elease/*.exe
 [Rr]eleases/
 x64/
 x86/
@@ -198,4 +200,3 @@ FakesAssemblies/
 *.sln
 *.vc*proj
 *.vc*proj.*
-~Release/*.exe

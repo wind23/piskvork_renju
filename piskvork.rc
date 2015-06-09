@@ -209,19 +209,21 @@ BEGIN
     PUSHBUTTON      "Cancel",2,93,292,51,16
 END
 
-ABOUT DIALOG 52, 18, 114, 109
-STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+ABOUT DIALOGEX 52, 18, 143, 109
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "About"
-FONT 10, "MS Shell Dlg"
+FONT 10, "MS Shell Dlg", 0, 0, 0x0
 BEGIN
-    CTEXT           "(C) 2000-2014  Petr Lastovicka",501,4,50,104,10
-    CTEXT           "Version",503,35,24,28,9
-    CTEXT           "Piskvorky",504,36,6,40,9
-    ICON            1,-1,12,20,20,20
-    PUSHBUTTON      "OK",IDOK,39,88,35,14
-    ICON            1,-1,85,20,20,20
-    PUSHBUTTON      "http://petr.lastovicka.sweb.cz",502,3,66,106,13
-    LTEXT           "",101,66,24,12,8
+    CTEXT           "(C) 2000-2015  Petr Lastovicka",501,19,42,104,10
+    CTEXT           "Version",503,51,24,28,9
+    CTEXT           "Piskvork Renju",504,47,6,50,9
+    ICON            1,-1,28,20,14,12
+    PUSHBUTTON      "OK",IDOK,53,94,35,14
+    ICON            1,-1,101,20,14,12
+    PUSHBUTTON      "https://github.com/wind23/piskvork_renju",502,0,78,143,15
+    LTEXT           "",101,80,24,17,8
+    CTEXT           "(C) 2012-2015  Tianyi Hao",505,19,53,104,10
+    PUSHBUTTON      "http://petr.lastovicka.sweb.cz/",506,0,62,143,15
 END
 
 PLAYERS DIALOG 0, 0, 222, 218
@@ -442,7 +444,7 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 8,6,1,0
+ FILEVERSION 1,1,0,0
  PRODUCTVERSION 0,0,0,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
@@ -460,9 +462,10 @@ BEGIN
         BEGIN
             VALUE "CompanyName", " "
             VALUE "FileDescription", "Piškvorky"
-            VALUE "FileVersion", "8, 6, 1, 0"
+            VALUE "FileVersion", "1.1.0.0"
             VALUE "LegalCopyright", "?2000 - 2014  Petr Laštovièka"
             VALUE "OriginalFilename", "piskvork.exe"
+            VALUE "ProductVersion", "0.0.0.0"
         END
     END
     BLOCK "VarFileInfo"
@@ -487,6 +490,10 @@ BEGIN
         VERTGUIDE, 147
         BOTTOMMARGIN, 310
         HORZGUIDE, 203
+    END
+
+    "ABOUT", DIALOG
+    BEGIN
     END
 
     "PLAYERS", DIALOG
