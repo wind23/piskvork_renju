@@ -1,6 +1,6 @@
 /*
 	(C) 2000-2015  Petr Lastovicka
-	(C) 2015  Tianyi Hao
+	(C) 2015-2016  Tianyi Hao
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

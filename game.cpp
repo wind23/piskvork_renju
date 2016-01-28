@@ -1,6 +1,6 @@
 /*
 	(C) 2000-2015  Petr Lastovicka
-	(C) 2015  Tianyi Hao
+	(C) 2015-2016  Tianyi Hao
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -1084,6 +1084,7 @@ void init()
 			p->y= y;
 			p->winLineDir=0;
 			p->winLineStart=0;
+			p->foulSquare=0;
 			p++;
 		}
 	}
@@ -1321,6 +1322,12 @@ bool doMove1(Psquare p, int action)
 				boardChanged();
 				cancelHilite();
 				printWinLine(p);
+			}
+			else {
+				for(;; prvP(p2, 1)) {
+					p2->foulSquare=p1;
+					if(p2==p1) break;
+				}
 			}
 
 			printScore();
