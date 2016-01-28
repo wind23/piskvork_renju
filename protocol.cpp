@@ -856,7 +856,7 @@ int Tplayer::move()
 	}
 	//remember the board
 	delete[] lastBoard;
-	if(moves==0 || lastMove->winLineStart || err){
+	if(moves==0 || lastMove->winLineStart || lastMove->foul || err){
 		DlastBoard=0;
 		lastBoard=0;
 	}

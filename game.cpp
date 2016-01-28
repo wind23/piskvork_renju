@@ -1084,7 +1084,7 @@ void init()
 			p->y= y;
 			p->winLineDir=0;
 			p->winLineStart=0;
-			p->foulSquare=0;
+			p->foul=0;
 			p++;
 		}
 	}
@@ -1324,10 +1324,10 @@ bool doMove1(Psquare p, int action)
 				printWinLine(p);
 			}
 			else {
-				for(;; prvP(p2, 1)) {
-					p2->foulSquare=p1;
-					if(p2==p1) break;
-				}
+				p->foul=1;
+				boardChanged();
+				cancelHilite();
+				printFoul(p);
 			}
 
 			printScore();
@@ -1388,6 +1388,10 @@ bool undo()
 			p2->winLineStart=0;
 			if(p2==p1) break;
 		}
+		UpdateWindow(hWin);
+	}
+	if(lastMove->foul==1) {
+		lastMove->foul=0;
 		UpdateWindow(hWin);
 	}
 	//erase square

@@ -46,7 +46,7 @@ struct Tsquare
   int time;       //total thinking time
   Psquare winLineStart;//0 or beginning of a winning line
   int winLineDir; //direction offset of a winning line
-  Psquare foulSquare;
+  int foul;
 };
 
 struct Txyp {
@@ -194,7 +194,7 @@ void printMoves();
 void printTime(int pl);
 bool getWinLine(Psquare p, Psquare &p2);
 void printWinLine(Psquare p);
-void printForbid(Psquare p);
+void printFoul(Psquare p);
 void invalidate();
 void hiliteLast();
 void cancelHilite();

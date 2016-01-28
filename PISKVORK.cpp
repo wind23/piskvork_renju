@@ -204,7 +204,7 @@ ACCEL accel[Maccel];
 ACCEL dlgKey;
 HANDLE thread, pipeThread;
 HMODULE psapi;
-COLORREF colors[3]; //background, text, winning line
+COLORREF colors[4]; //background, text, winning line
 CRITICAL_SECTION timerLock, drawLock;
 SIZE szScore, szCoord, szMove, szName[2], szTimeGame[2], szTimeMove[2];
 
@@ -780,7 +780,7 @@ void cancelHilite()
 void hiliteLast()
 {
 	cancelHilite();
-	if(moves && hiliteDelay && !lastMove->winLineDir){
+	if(moves && hiliteDelay && !lastMove->winLineDir && !lastMove->foul){
 		SetTimer(hWin, 10, hiliteDelay, NULL);
 		paintSquare(hilited=lastMove);
 	}
@@ -910,6 +910,18 @@ void printWinLine(Psquare p)
 	InvalidateRect(hWin, &rc, FALSE);
 }
 
+void printFoul(Psquare p)
+{
+	RECT rc;
+
+	if(!p->foul) return;
+	rc.left=X(p);
+	rc.top=Y(p);
+	rc.right=rc.left+bmW;
+	rc.bottom=rc.top+bmW;
+	InvalidateRect(hWin, &rc, FALSE);
+}
+
 void status()
 {
 	printMoves();
@@ -1012,6 +1024,12 @@ void repaint(RECT *clip)
 			getWinLine(p, p2);
 			penOld= SelectObject(dc, CreatePen(PS_SOLID, 3, colors[2]));
 			line(X(p) + bmW/2, Y(p) + bmW/2, X(p2) + bmW/2, Y(p2) + bmW/2);
+			DeleteObject(SelectObject(dc, penOld));
+		}
+		if(p->foul){
+			penOld= SelectObject(dc, CreatePen(PS_SOLID, 3, colors[3]));
+			line(X(p) + bmW * 0.1 , Y(p) + bmW * 0.1 , X(p) + bmW * 0.9 , Y(p) + bmW * 0.9);
+			line(X(p) + bmW * 0.9 , Y(p) + bmW * 0.1 , X(p) + bmW * 0.1 , Y(p) + bmW * 0.9);
 			DeleteObject(SelectObject(dc, penOld));
 		}
 	}
@@ -1133,7 +1151,7 @@ char *loadSkin(HBITMAP fbmp)
 			bmW=h;
 			DeleteObject(SelectObject(bmpdc, fbmp));
 			bm=fbmp;
-			for(int i=0; i<3; i++){
+			for(int i=0; i<4; i++){
 				colors[i]= GetPixel(bmpdc, bmW*5, i);
 			}
 			SetBkColor(dc, colors[0]);

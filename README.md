@@ -20,10 +20,9 @@ The command that Piskvork sends to the brain for renju rule is:
 
 	INFO rule 4
 
-Usage: Just replace the piskvork.exe in the original
-[Piskvork package](http://sourceforge.net/projects/piskvork/files/piskvork.zip/download)
-with the [new EXE file](https://raw.github.com/wind23/piskvork_renju/master/Release/piskvork.exe)
-in Piskvork for Renju.
+Usage: Just copy the files in the directory [Release](https://raw.github.com/wind23/piskvork_renju/master/Release/)
+in Piskvork for Renju to the original [Piskvork package](http://sourceforge.net/projects/piskvork/files/piskvork.zip/download)
+to replace the original files.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the
