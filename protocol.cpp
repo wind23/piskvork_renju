@@ -602,7 +602,12 @@ int Tplayer::sendInfo(int mask)
 	if((mask & INFO_RULE)/* && !turNplayers*/){
 		//I dont why there is !turNplayers in condition,
 		//but that is the reason why rule 1 is not send in the tournament
-		sendInfoCmd("rule", ruleFive|(continuous<<1));
+		if(ruleFive < 2) {
+			sendInfoCmd("rule", ruleFive|(continuous<<1));
+		}
+		else {
+			sendInfoCmd("rule", 4|(continuous<<1));
+		}
 	}
 	if(mask & INFO_TIMELEFT) sendInfoCmd("time_left", timeLeft());
 	if((mask & INFO_DIR) && dataDir[0] && !isClient){

@@ -1328,7 +1328,7 @@ bool doMove1(Psquare p, int action)
 			break;
 		}
 	}
-	if(moves>=width*height*9/10 && !finished){
+	if(moves>=width*height-25 && !finished){
 		//board is full
 		if(turNplayers && turTieCounter<turTieRepeat){
 			turTieCounter++;

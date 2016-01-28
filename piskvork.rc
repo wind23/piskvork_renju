@@ -166,10 +166,13 @@ BEGIN
     EDITTEXT        104,107,4,21,14,ES_NUMBER
     CONTROL         "&Automatic opening moves",545,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,25,148,10
     CONTROL         "&Openings are randomly rotated",568,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,38,148,10
-    GROUPBOX        "Rules",672,4,53,148,50
-    CONTROL         "five or mo&re stones win",555,"Button",BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,11,63,137,10
-    CONTROL         "e&xactly five stones win",556,"Button",BS_AUTORADIOBUTTON,11,75,137,10
-    CONTROL         "renju rule",557,"Button",BS_AUTORADIOBUTTON,11,87,137,10
+    GROUPBOX        "Rules",672,4,53,148,42
+    CONTROL         "five or mo&re stones win",555,"Button",BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,11,61,137,10
+    CONTROL         "e&xactly five stones win",556,"Button",BS_AUTORADIOBUTTON,11,71,137,10
+    CONTROL         "renju rule",557,"Button",BS_AUTORADIOBUTTON,11,81,137,10
+	GROUPBOX        "",IDC_STATIC,4,94,148,34
+    CONTROL         "singl&e game",559,"Button",BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,11,100,137,10
+    CONTROL         "&continuous game",560,"Button",BS_AUTORADIOBUTTON,11,112,137,10
     GROUPBOX        "",IDC_STATIC,4,127,148,136,WS_GROUP
     CTEXT           "Highlight durat&ion :",513,7,138,73,8
     EDITTEXT        108,84,136,30,14,ES_NUMBER

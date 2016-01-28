@@ -33,7 +33,7 @@ struct TgameSettings {
 	char sendMoves;
 	char tieRepeat;
 	char messages;
-	char exactFive;
+	char ruleFive;
 	char openingData[1];
 	void fill();
 	void use();
@@ -364,7 +364,7 @@ void TgameSettings::fill()
 	sendMoves=(char)turRecord;
 	tieRepeat=(char)turTieRepeat;
 	messages=(char)turLogMsg;
-	exactFive=(char)::ruleFive;
+	ruleFive=(char)::ruleFive;
 	openingData[0]=0;
 }
 
