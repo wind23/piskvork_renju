@@ -15,8 +15,7 @@
 [Dd]ebugPublic/
 ![Rr]elease/
 [Rr]elease/*
-![Rr]elease/*.exe
-![Rr]elease/skins/
+![Rr]elease/*.zip
 [Rr]eleases/
 x64/
 x86/
